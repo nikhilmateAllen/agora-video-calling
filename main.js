@@ -106,7 +106,7 @@ async function startBasicCall() {
       history.pushState({}, "", url);
 
       // Enable dual-stream mode.
-      // agoraEngine.enableDualStream();
+      agoraEngine.enableDualStream();
 
       // Join a channel.
       await agoraEngine.join(options.appId, options.channel, options.token, options.uid);
