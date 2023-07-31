@@ -210,22 +210,7 @@ function setFramerateInVideoIntervals(){
   videoTimer = setInterval(async () => {
     console.log('changing video track...')
     await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate, /* height: currentFramerate == 5 ? 120 : 480, width: currentFramerate === 5 ? 160 : 640 */ })
-    
-    // await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
-    // channelParameters.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({encoderConfig: "high_quality_stereo",});
-    // channelParameters.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
-    //   encoderConfig: {
-    //     width: 640,
-    //     // Specify a value range and an ideal value
-    //     height: { ideal: 480, min: 400, max: 500 },
-    //     frameRate: currentFramerate,
-    //     bitrateMin: 600, bitrateMax: 1000,
-    //   },
-    //   optimizationMode: options.optimizationMode || 'detail'
-    // });
     currentFramerate = currentFramerate === 5 ? 20 : 5
-    // await agoraEngine.publish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
-    
     console.log('video track changed!')
   }, 15000);
 }
