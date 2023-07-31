@@ -132,7 +132,9 @@ async function startBasicCall() {
         optimizationMode: options.optimizationMode || 'detail'
       });
 
-      setVideoIntervals()
+      // change framerate
+      setFramerateInVideoIntervals()
+
       // Append the local video container to the page body.
       document.body.append(localPlayerContainer);
       // Publish the local audio and video tracks in the channel.
@@ -192,11 +194,12 @@ function sendDataToMixPanel (){
   }, 5000);
 }
 
-function setVideoIntervals(){
+function setFramerateInVideoIntervals(){
   clearInterval(videoTimer)
   videoTimer = setInterval(async () => {
     console.log('changing video track...')
     await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate })
+    
     // await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
     // channelParameters.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({encoderConfig: "high_quality_stereo",});
     // channelParameters.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
@@ -211,6 +214,7 @@ function setVideoIntervals(){
     // });
     // currentFramerate = currentFramerate === 5 ? 20 : 5
     // await agoraEngine.publish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
+    
     console.log('video track changed!')
   }, 15000);
 }
