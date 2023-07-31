@@ -76,7 +76,7 @@ async function startBasicCall() {
       document.body.append(remotePlayerContainer);
 
        // Set a stream fallback option to automatically switch remote video quality when network conditions degrade. 
-      agoraEngine.setStreamFallbackOption(channelParameters.remoteUid, 1);
+      // agoraEngine.setStreamFallbackOption(channelParameters.remoteUid, 1);
  
       // Play the remote video track.
       channelParameters.remoteVideoTrack.play(remotePlayerContainer);
@@ -132,7 +132,7 @@ async function startBasicCall() {
         optimizationMode: options.optimizationMode || 'detail'
       });
 
-      // setVideoIntervals()
+      setVideoIntervals()
       // Append the local video container to the page body.
       document.body.append(localPlayerContainer);
       // Publish the local audio and video tracks in the channel.
@@ -195,19 +195,23 @@ function sendDataToMixPanel (){
 function setVideoIntervals(){
   clearInterval(videoTimer)
   videoTimer = setInterval(async () => {
-    await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
-    channelParameters.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
-      encoderConfig: {
-        width: 640,
-        // Specify a value range and an ideal value
-        height: { ideal: 480, min: 400, max: 500 },
-        frameRate: currentFramerate,
-        bitrateMin: 600, bitrateMax: 1000,
-      },
-      optimizationMode: options.optimizationMode || 'detail'
-    });
-    currentFramerate = currentFramerate === 5 ? 20 : 5
-    await agoraEngine.publish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
+    console.log('changing video track...')
+    await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate })
+    // await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
+    // channelParameters.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({encoderConfig: "high_quality_stereo",});
+    // channelParameters.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
+    //   encoderConfig: {
+    //     width: 640,
+    //     // Specify a value range and an ideal value
+    //     height: { ideal: 480, min: 400, max: 500 },
+    //     frameRate: currentFramerate,
+    //     bitrateMin: 600, bitrateMax: 1000,
+    //   },
+    //   optimizationMode: options.optimizationMode || 'detail'
+    // });
+    // currentFramerate = currentFramerate === 5 ? 20 : 5
+    // await agoraEngine.publish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
+    console.log('video track changed!')
   }, 15000);
 }
 
