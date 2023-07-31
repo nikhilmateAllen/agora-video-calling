@@ -174,9 +174,9 @@ function sendDataToMixPanel (){
     let localVideoStats = agoraEngine.getLocalVideoStats();
     let remoteAudioStats = agoraEngine.getLocalVideoStats();
     let remoteVideoStats = agoraEngine.getRemoteVideoStats();
-    sendEvent('HOST_AUDIO_STATS', {...localAudioStats, user: options.uid});
-    sendEvent('HOST_VIDEO_STATS', {...localVideoStats, user: options.uid});
-    sendEvent('HOST_AV_STATS', {...agoraEngine.getRTCStats(), user: options.uid, netowrk: agoraEngine.getRemoteNetworkQuality()});
+    sendEvent('VC_HOST_AUDIO_STATS', {...localAudioStats, user: options.uid});
+    sendEvent('VC_HOST_VIDEO_STATS', {...localVideoStats, user: options.uid});
+    sendEvent('VC_HOST_AV_STATS', {...agoraEngine.getRTCStats(), user: options.uid, netowrk: agoraEngine.getRemoteNetworkQuality()});
     // sendEvent('remote video stats', remoteVideoStats);
     // sendEvent('remote audio stats', remoteAudioStats);
     agoraEngine.on("exception", function(evt) {
