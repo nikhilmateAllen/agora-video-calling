@@ -104,10 +104,7 @@ async function startBasicCall() {
       const url = new URL(location);
       url.searchParams.set('token', options.token);
       history.pushState({}, "", url);
-
-      // Enable dual-stream mode.
-      // agoraEngine.enableDualStream();
-
+      
       // Join a channel.
       await agoraEngine.join(options.appId, options.channel, options.token, options.uid);
       
@@ -125,8 +122,8 @@ async function startBasicCall() {
           height: { ideal: 480, min: 400, max: 500 },
           frameRate: 15,
           bitrateMin: 600, bitrateMax: 1000,
-          optimizationMode: options.optimizationMode || 'detail'
         },
+        optimizationMode: options.optimizationMode || 'detail'
       });
       // Append the local video container to the page body.
       document.body.append(localPlayerContainer);
