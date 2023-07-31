@@ -146,8 +146,8 @@ async function startBasicCall() {
     // Listen to the Leave button click event.
     document.getElementById('leave').onclick = async function () {
       // Destroy the local audio and video tracks.
-      channelParameters.localAudioTrack.close();
-      channelParameters.localVideoTrack.close();
+      channelParameters?.localAudioTrack?.close();
+      channelParameters?.localVideoTrack?.close();
       // Remove the containers you created for the local video and remote video.
       removeVideoDiv(remotePlayerContainer.id);
       removeVideoDiv(localPlayerContainer.id);
@@ -198,7 +198,7 @@ function setFramerateInVideoIntervals(){
   clearInterval(videoTimer)
   videoTimer = setInterval(async () => {
     console.log('changing video track...')
-    await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate })
+    await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate, height: currentFramerate == 5 ? 120 : 480, width: currentFramerate === 5 ? 160 : 640 })
     
     // await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
     // channelParameters.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({encoderConfig: "high_quality_stereo",});
