@@ -183,16 +183,6 @@ function sendDataToMixPanel (){
       sendEvent('EXCEPTION', {code: evt.code, msg: evt.msg, uid: evt.uid})
       // console.log(evt.code, evt.msg, evt.uid);
     })
-
-    sendEvent('HOST_AUDIO_STATS', {...localAudioStats, user: options.uid});
-    sendEvent('HOST_VIDEO_STATS', {...localVideoStats, user: options.uid});
-    sendEvent('HOST_AV_STATS', {...agoraEngine.getRTCStats(), user: options.uid, netowrk: agoraEngine.getRemoteNetworkQuality()});
-    // sendEvent('remote video stats', remoteVideoStats);
-    // sendEvent('remote audio stats', remoteAudioStats);
-    agoraEngine.on("exception", function(evt) {
-      sendEvent('EXCEPTION', {code: evt.code, msg: evt.msg, uid: evt.uid})
-      // console.log(evt.code, evt.msg, evt.uid);
-    })
   }, 5000);
 }
 
