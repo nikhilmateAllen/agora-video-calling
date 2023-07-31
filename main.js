@@ -12,7 +12,7 @@ let options =
   // Set the user ID.
   uid: 0,
   // Set the user role
-  role: '',
+  role: '', //ignore
   optimizationMode: 'detail'
 };
 
