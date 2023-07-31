@@ -32,6 +32,8 @@ let channelParameters =
 
 let isHighRemoteVideoQuality = false;
 let mixPanelTimer = null
+let currentFramerate = 20
+let videoTimer = null
 // Create an instance of the Agora Engine
 const agoraEngine = AgoraRTC.createClient({ mode: "rtc", codec: "vp9" });
 
@@ -104,7 +106,7 @@ async function startBasicCall() {
       const url = new URL(location);
       url.searchParams.set('token', options.token);
       history.pushState({}, "", url);
-      
+
       // Join a channel.
       await agoraEngine.join(options.appId, options.channel, options.token, options.uid);
       
@@ -120,11 +122,13 @@ async function startBasicCall() {
           width: 640,
           // Specify a value range and an ideal value
           height: { ideal: 480, min: 400, max: 500 },
-          frameRate: 15,
+          frameRate: 20,
           bitrateMin: 600, bitrateMax: 1000,
         },
         optimizationMode: options.optimizationMode || 'detail'
       });
+
+      // setVideoIntervals()
       // Append the local video container to the page body.
       document.body.append(localPlayerContainer);
       // Publish the local audio and video tracks in the channel.
@@ -182,6 +186,25 @@ function sendDataToMixPanel (){
       // console.log(evt.code, evt.msg, evt.uid);
     })
   }, 5000);
+}
+
+function setVideoIntervals(){
+  clearInterval(videoTimer)
+  videoTimer = setInterval(async () => {
+    await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
+    channelParameters.localVideoTrack = await AgoraRTC.createCameraVideoTrack({
+      encoderConfig: {
+        width: 640,
+        // Specify a value range and an ideal value
+        height: { ideal: 480, min: 400, max: 500 },
+        frameRate: currentFramerate,
+        bitrateMin: 600, bitrateMax: 1000,
+      },
+      optimizationMode: options.optimizationMode || 'detail'
+    });
+    currentFramerate = currentFramerate === 5 ? 20 : 5
+    await agoraEngine.publish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
+  }, 15000);
 }
 
 // Remove the video stream from the container.
