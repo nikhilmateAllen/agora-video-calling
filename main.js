@@ -212,7 +212,7 @@ function setFramerateInVideoIntervals(){
     //   },
     //   optimizationMode: options.optimizationMode || 'detail'
     // });
-    // currentFramerate = currentFramerate === 5 ? 20 : 5
+    currentFramerate = currentFramerate === 5 ? 20 : 5
     // await agoraEngine.publish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
     
     console.log('video track changed!')
