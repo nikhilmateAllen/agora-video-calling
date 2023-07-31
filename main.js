@@ -151,6 +151,17 @@ async function startBasicCall() {
       window.location.reload();
     }
 
+    document.getElementById('quality').addEventListener('click', function () {
+      if (isHighRemoteVideoQuality == false) {
+        agoraEngine.setRemoteVideoStreamType(channelParameters.remoteUid, 0);
+        isHighRemoteVideoQuality = true;
+      }
+      else {
+        agoraEngine.setRemoteVideoStreamType(channelParameters.remoteUid, 1);
+        isHighRemoteVideoQuality = false;
+      }
+    });
+
     document.getElementById('opt-mode').onchange = async function(ev) {
       let mode = ev.target.value
       options.optimizationMode = mode
