@@ -126,7 +126,7 @@ async function startBasicCall() {
             ideal: 480, 
             min: 400, 
           },
-          frameRate: 20, //15
+          frameRate: 15, //15
           bitrateMin: 600, bitrateMax: 1000,
         },
         optimizationMode: options.optimizationMode || 'detail'
