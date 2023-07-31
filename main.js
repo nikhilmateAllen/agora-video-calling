@@ -189,15 +189,27 @@ function sendDataToMixPanel (){
   }
   mixPanelTimer=setInterval(() => {
 
-    let localAudioStats = agoraEngine.getLocalAudioStats();
-    let localVideoStats = agoraEngine.getLocalVideoStats();
-    let remoteAudioStats = agoraEngine.getLocalVideoStats();
+    // let localAudioStats = agoraEngine.getLocalAudioStats();
+    // let localVideoStats = agoraEngine.getLocalVideoStats();
+    let remoteAudioStats = agoraEngine.getRemoteAudioStats();
     let remoteVideoStats = agoraEngine.getRemoteVideoStats();
-    sendEvent('VC_HOST_AUDIO_STATS', {...localAudioStats, user: options.uid});
-    sendEvent('VC_HOST_VIDEO_STATS', {...localVideoStats, user: options.uid});
+    // console.log(agoraEngine.getRTCStats())
+    
+    Object.entries(remoteAudioStats).map(([key, value]) => {
+      let audioData = { userid: key, local_user: options.uid, ...value }
+      sendEvent('VC_HOST_AUDIO_STATS', audioData);
+    })
+
+    Object.entries(remoteVideoStats).map(([key, value]) => {
+      let videoData = { userid: key, local_user: options.uid, ...value }
+      sendEvent('VC_HOST_VIDEO_STATS', videoData);
+    })
+    
     sendEvent('VC_HOST_AV_STATS', {...agoraEngine.getRTCStats(), user: options.uid, netowrk: agoraEngine.getRemoteNetworkQuality()});
+
     // sendEvent('remote video stats', remoteVideoStats);
     // sendEvent('remote audio stats', remoteAudioStats);
+
     agoraEngine.on("exception", function(evt) {
       sendEvent('VC_EXCEPTION', {code: evt.code, msg: evt.msg, uid: evt.uid})
       // console.log(evt.code, evt.msg, evt.uid);
