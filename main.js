@@ -92,6 +92,17 @@ async function startBasicCall() {
     agoraEngine.on("user-unpublished", user => {
       console.log(user.uid + "has left the channel");
     });
+    agoraEngine.on("network-quality", async (quality) => {
+      console.log(quality.uplinkNetworkQuality, '\nand\n', quality.downlinkNetworkQuality)
+      if(quality.uplinkNetworkQuality >= 4 && currentFramerate > 5) {
+        currentFramerate = 5
+        await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate })
+      } else if(quality.uplinkNetworkQuality < 4 && currentFramerate <= 5) {
+        currentFramerate = 20
+        await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate })
+      }
+      console.log("\n\framerate changed!")
+    });
   });
   window.onload = function () {
     var urlParams = new URL(location.href).searchParams;
@@ -133,7 +144,7 @@ async function startBasicCall() {
       });
 
       // change framerate
-      setFramerateInVideoIntervals()
+      // setFramerateInVideoIntervals()
 
       // Append the local video container to the page body.
       document.body.append(localPlayerContainer);
@@ -198,7 +209,7 @@ function setFramerateInVideoIntervals(){
   clearInterval(videoTimer)
   videoTimer = setInterval(async () => {
     console.log('changing video track...')
-    await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate, height: currentFramerate == 5 ? 120 : 480, width: currentFramerate === 5 ? 160 : 640 })
+    await channelParameters.localVideoTrack.setEncoderConfiguration({ frameRate: currentFramerate, /* height: currentFramerate == 5 ? 120 : 480, width: currentFramerate === 5 ? 160 : 640 */ })
     
     // await agoraEngine.unpublish([channelParameters.localAudioTrack, channelParameters.localVideoTrack]);
     // channelParameters.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({encoderConfig: "high_quality_stereo",});
