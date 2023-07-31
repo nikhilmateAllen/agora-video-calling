@@ -30,7 +30,6 @@ let channelParameters =
   remoteUid: null,
 };
 
-let isHighRemoteVideoQuality = false;
 let mixPanelTimer = null
 // Create an instance of the Agora Engine
 const agoraEngine = AgoraRTC.createClient({ mode: "rtc", codec: "vp9" });
