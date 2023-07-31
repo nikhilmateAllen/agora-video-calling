@@ -192,7 +192,7 @@ function sendDataToMixPanel (){
     // sendEvent('remote video stats', remoteVideoStats);
     // sendEvent('remote audio stats', remoteAudioStats);
     agoraEngine.on("exception", function(evt) {
-      sendEvent('EXCEPTION', {code: evt.code, msg: evt.msg, uid: evt.uid})
+      sendEvent('VC_EXCEPTION', {code: evt.code, msg: evt.msg, uid: evt.uid})
       // console.log(evt.code, evt.msg, evt.uid);
     })
   }, 5000);
