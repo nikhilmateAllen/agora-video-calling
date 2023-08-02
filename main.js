@@ -10,7 +10,7 @@ let options =
   // Pass your temp token here.
   token: '',
   // Set the user ID.
-  uid: 0,
+  uid: 98765,
   // Set the user role
   role: '',
   optimizationMode: 'detail'
@@ -121,7 +121,7 @@ async function startBasicCall() {
       // Join a channel.
       await agoraEngine.join(options.appId, options.channel, options.token, options.uid);
       
-      sendDataToMixPanel()
+      // sendDataToMixPanel()
 
       // Create a local audio track from the audio sampled by a microphone.
       channelParameters.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack({encoderConfig: "high_quality_stereo",});
@@ -189,11 +189,13 @@ function sendDataToMixPanel (){
   }
   mixPanelTimer=setInterval(() => {
 
-    // let localAudioStats = agoraEngine.getLocalAudioStats();
-    // let localVideoStats = agoraEngine.getLocalVideoStats();
-    let remoteAudioStats = agoraEngine.getRemoteAudioStats();
-    let remoteVideoStats = agoraEngine.getRemoteVideoStats();
-    // console.log(agoraEngine.getRTCStats())
+    let remoteAudioStats = client.getRemoteAudioStats();
+    let remoteVideoStats = client.getRemoteVideoStats();
+
+    // let localAudioStats = client.getLocalAudioStats();
+    // let localVideoStats = client.getLocalVideoStats();
+    console.log('remoteVideoStats\n', remoteVideoStats)
+    console.log('RTC\n', client.getRTCStats(), client.getRemoteNetworkQuality())
     
     Object.entries(remoteAudioStats).map(([key, value]) => {
       let audioData = { userid: key, local_user: options.uid, ...value }
@@ -205,17 +207,18 @@ function sendDataToMixPanel (){
       sendEvent('VC_HOST_VIDEO_STATS', videoData);
     })
     
-    sendEvent('VC_HOST_AV_STATS', {...agoraEngine.getRTCStats(), user: options.uid, netowrk: agoraEngine.getRemoteNetworkQuality()});
-
-    // sendEvent('remote video stats', remoteVideoStats);
-    // sendEvent('remote audio stats', remoteAudioStats);
-
-    agoraEngine.on("exception", function(evt) {
+    // sendEvent('HOST_AUDIO_STATS', {...localAudioStats, user: options.uid});
+    // sendEvent('HOST_VIDEO_STATS', {...localVideoStats, user: options.uid});
+    sendEvent('VC_HOST_AV_STATS', {...client.getRTCStats(), user: options.uid, netowrk: client.getRemoteNetworkQuality()});
+    // // sendEvent('remote video stats', remoteVideoStats);
+    // // sendEvent('remote audio stats', remoteAudioStats);
+    client.on("exception", function(evt) {
       sendEvent('VC_EXCEPTION', {code: evt.code, msg: evt.msg, uid: evt.uid})
       // console.log(evt.code, evt.msg, evt.uid);
     })
   }, 5000);
 }
+
 
 function setFramerateInVideoIntervals(){
   clearInterval(videoTimer)
